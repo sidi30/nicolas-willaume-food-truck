@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../context/AppContext';
 import { formatEuro } from '../utils/schedule';
@@ -27,6 +27,7 @@ export default function RecapScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <Image source={require('../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
         <Text style={styles.header}>Récapitulatif</Text>
 
         <View style={styles.infoCard}>
@@ -86,6 +87,7 @@ export default function RecapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { padding: 16, paddingBottom: 120 },
+  brandLogo: { width: 140, height: 34, marginBottom: 8 },
   header: { color: COLORS.text, fontSize: 24, fontWeight: '800', marginBottom: 12 },
   infoCard: { backgroundColor: '#fff', borderWidth: 1, borderColor: COLORS.border, borderRadius: 16, padding: 14, marginBottom: 16 },
   row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },

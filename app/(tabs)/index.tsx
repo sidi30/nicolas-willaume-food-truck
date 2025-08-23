@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,6 +7,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <Image source={require('../../utils/logo.jpg')} style={styles.logo} resizeMode="contain" />
         <Text style={styles.brand}>William Food Truck</Text>
         <Text style={styles.muted}>Street food gourmande</Text>
       </View>
@@ -48,6 +49,11 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 8,
     marginBottom: 16,
+  },
+  logo: {
+    width: 160,
+    height: 40,
+    marginBottom: 8,
   },
   brand: {
     fontSize: 24,

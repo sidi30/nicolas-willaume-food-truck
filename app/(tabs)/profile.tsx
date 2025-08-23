@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
+      <Image source={require('../../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
       <Text style={styles.title}>Mon profil</Text>
       <Text style={styles.subtitle}>Paramètres à venir</Text>
     </View>
@@ -17,6 +18,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fcfaf8',
     padding: 24,
+  },
+  brandLogo: {
+    width: 160,
+    height: 40,
+    marginBottom: 12,
   },
   title: {
     fontSize: 22,

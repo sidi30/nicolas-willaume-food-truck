@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { getCities } from '../utils/schedule';
@@ -24,6 +24,7 @@ export default function CityScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <Image source={require('../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
         <View style={styles.headerRow}>
           <Text style={styles.header}>Sélection de la ville</Text>
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
@@ -69,6 +70,7 @@ export default function CityScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { padding: 16, paddingBottom: 24 },
+  brandLogo: { width: 140, height: 34, marginBottom: 8 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   header: { color: COLORS.text, fontSize: 24, fontWeight: '800' },
   backBtn: { backgroundColor: '#fff', borderColor: COLORS.border, borderWidth: 1, borderRadius: 999, paddingVertical: 8, paddingHorizontal: 12 },

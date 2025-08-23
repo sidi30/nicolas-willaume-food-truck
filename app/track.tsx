@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useApp } from '../context/AppContext';
@@ -34,6 +34,7 @@ export default function TrackScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        <Image source={require('../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
         <Text style={styles.header}>Commande en cours</Text>
         <View style={styles.card}>
           <Text style={styles.muted}>Réf</Text>
@@ -71,6 +72,7 @@ export default function TrackScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { padding: 16 },
+  brandLogo: { width: 140, height: 34, marginBottom: 8 },
   header: { fontSize: 24, color: COLORS.text, fontWeight: '800', marginBottom: 12 },
   card: { backgroundColor: '#fff', borderWidth: 1, borderColor: COLORS.border, borderRadius: 16, padding: 14, marginBottom: 16 },
   muted: { color: COLORS.muted },

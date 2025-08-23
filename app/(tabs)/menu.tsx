@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, useWindowDimensions } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, useWindowDimensions, Image } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp, Product } from '../../context/AppContext';
@@ -44,7 +44,8 @@ export default function MenuScreen() {
   const { addToCart, cartTotal, cartCount } = useApp();
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
-  const tabBarHeight = useBottomTabBarHeight();
+  const insets = useSafeAreaInsets();
+  const tabBarSpace = 68 + 12 + insets.bottom; // tab height + margin + safe area
 
   const items = useMemo(() => {
     return SAMPLE_ITEMS
@@ -55,6 +56,7 @@ export default function MenuScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+      <Image source={require('../../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
       <Text style={styles.header}>Menu</Text>
 
       <View style={styles.searchBox}>
@@ -104,7 +106,7 @@ export default function MenuScreen() {
       </ScrollView>
 
       {cartCount > 0 && (
-        <View style={[styles.stickyFooter, { bottom: tabBarHeight }] }>
+        <View style={[styles.stickyFooter, { bottom: tabBarSpace }]}>
           <View>
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalValue}>{formatEuro(cartTotal)}</Text>
@@ -127,6 +129,11 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     paddingBottom: 120,
+  },
+  brandLogo: {
+    width: 140,
+    height: 34,
+    marginBottom: 8,
   },
   header: {
     color: COLORS.text,

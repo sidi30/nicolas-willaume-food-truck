@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useApp } from '../context/AppContext';
@@ -25,6 +25,7 @@ export default function ConfirmScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        <Image source={require('../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
         <Text style={styles.header}>Commande {order?.id || ''}</Text>
         <View style={styles.card}>
           <Text style={styles.accepted}>{status === 'Acceptée' ? 'Acceptée' : status}</Text>
@@ -39,6 +40,12 @@ export default function ConfirmScreen() {
             <Text style={styles.secondaryText}>Accueil</Text>
           </Pressable>
         </View>
+
+        <View style={{ marginTop: 12 }}>
+          <Pressable style={styles.secondaryBtn} onPress={() => router.push({ pathname: '/order/[orderId]', params: { orderId: order?.id } })}>
+            <Text style={styles.secondaryText}>Voir le détail de la commande</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -47,6 +54,7 @@ export default function ConfirmScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { padding: 16 },
+  brandLogo: { width: 140, height: 34, marginBottom: 8 },
   header: { fontSize: 24, color: COLORS.text, fontWeight: '800', marginBottom: 12 },
   card: { backgroundColor: '#fff', borderWidth: 1, borderColor: COLORS.border, borderRadius: 16, padding: 14, marginBottom: 16 },
   accepted: { color: COLORS.text, fontWeight: '800', marginBottom: 6 },

@@ -5,8 +5,17 @@
     "scheme": "williamfoodtruck",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./utils/logo.jpg",
+    "splash": {
+      "image": "./utils/logo.jpg",
+      "backgroundColor": "#fcfaf8",
+      "resizeMode": "contain"
+    },
     "plugins": ["expo-router"],
     "platforms": ["android", "ios", "web"],
+    "web": {
+      "favicon": "./utils/logo.jpg"
+    },
     "newArchEnabled": false
   }
 }

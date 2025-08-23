@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../../context/AppContext';
@@ -20,6 +20,7 @@ export default function OrdersScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <Image source={require('../../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
         <Text style={styles.header}>Mes commandes</Text>
 
         <View style={styles.list}>
@@ -40,7 +41,7 @@ export default function OrdersScreen() {
                   <Text style={styles.date}>{new Date(o.date).toLocaleString('fr-FR')}</Text>
                   <Text style={styles.total}>{formatEuro(o.total)}</Text>
                 </View>
-                <Pressable style={styles.detailBtn} onPress={() => router.push({ pathname: '/track', params: { orderId: o.id } })}>
+                <Pressable style={styles.detailBtn} onPress={() => router.push({ pathname: '/order/[orderId]', params: { orderId: o.id } })}>
                   <Text style={styles.detailBtnText}>Voir le détail</Text>
                   <Ionicons name="chevron-forward" size={16} color={COLORS.bg} style={{ marginLeft: 6 }} />
                 </Pressable>
@@ -56,6 +57,7 @@ export default function OrdersScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },
   content: { padding: 16, paddingBottom: 24 },
+  brandLogo: { width: 140, height: 34, marginBottom: 8 },
   header: { fontSize: 24, color: COLORS.text, fontWeight: '800', marginBottom: 12 },
   list: {},
   empty: { color: COLORS.muted },
