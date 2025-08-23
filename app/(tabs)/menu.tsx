@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, useWindowDimensions, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,42 +16,36 @@ const COLORS = {
   chipBg: '#f7f1ec',
 };
 
-const CATEGORIES = ['Burgers', 'Wraps', 'Boissons', 'Desserts', 'Menus'];
+const FALLBACK_CATEGORIES = ['Burgers', 'Wraps', 'Boissons', 'Desserts', 'Menus'];
 
-const SAMPLE_ITEMS: (Product & { desc: string; category: string })[] = [
-  // Burgers
-  { id: '1', title: 'Burger Classique', desc: 'Bœuf, cheddar, salade, tomate, sauce maison', price: 9.5, category: 'Burgers' },
-  { id: '2', title: 'Burger Signature', desc: 'Bœuf maturé, double cheddar, oignons confits', price: 12, category: 'Burgers' },
-  // Wraps
-  { id: '3', title: 'Wrap Poulet', desc: 'Poulet croustillant, salade, tomate, sauce yaourt', price: 8.5, category: 'Wraps' },
-  // Menus (combos)
-  { id: 'm1', title: 'Menu Classique', desc: 'Burger Classique + Frites + Boisson', price: 13.5, category: 'Menus' },
-  { id: 'm2', title: 'Menu Signature', desc: 'Burger Signature + Frites + Boisson', price: 16, category: 'Menus' },
-  { id: 'm3', title: 'Menu Wrap', desc: 'Wrap Poulet + Frites + Boisson', price: 12, category: 'Menus' },
-  // Boissons
-  { id: 'b1', title: 'Coca-Cola 33cl', desc: 'Canette fraîche', price: 2.5, category: 'Boissons' },
-  { id: 'b2', title: 'Eau minérale 50cl', desc: 'Plate', price: 1.8, category: 'Boissons' },
-  { id: 'b3', title: 'Limonade artisanale 33cl', desc: 'Citron bio', price: 3.2, category: 'Boissons' },
-  // Desserts
-  { id: 'd1', title: 'Cookie chocolat', desc: 'Moelleux, pépites de chocolat', price: 2.2, category: 'Desserts' },
-  { id: 'd2', title: 'Tiramisu maison', desc: 'Classique italien', price: 4.0, category: 'Desserts' },
-  { id: 'd3', title: 'Cheesecake', desc: 'Coulis fruits rouges', price: 3.8, category: 'Desserts' },
-];
+// Items are sourced from AppContext.products; fallback constants kept for reference only
 
 export default function MenuScreen() {
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState(CATEGORIES[0]);
-  const { addToCart, cartTotal, cartCount } = useApp();
+  const [selected, setSelected] = useState<string>('');
+  const { addToCart, cartTotal, cartCount, products } = useApp();
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
   const insets = useSafeAreaInsets();
   const tabBarSpace = 68 + 12 + insets.bottom; // tab height + margin + safe area
 
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    (products || []).forEach((p) => set.add(p.category || 'Autres'));
+    const list = Array.from(set);
+    return list.length ? list : FALLBACK_CATEGORIES;
+  }, [products]);
+
+  useEffect(() => {
+    if (!selected && categories.length) setSelected(categories[0]);
+  }, [categories, selected]);
+
   const items = useMemo(() => {
-    return SAMPLE_ITEMS
-      .filter((i) => (selected ? i.category === selected : true))
+    const source = (products as (Product & { desc?: string; category?: string })[]) || [];
+    return source
+      .filter((i) => (selected ? (i.category || 'Autres') === selected : true))
       .filter((i) => (i.title + ' ' + i.desc).toLowerCase().includes(query.toLowerCase()));
-  }, [query, selected]);
+  }, [query, selected, products]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,7 +65,7 @@ export default function MenuScreen() {
       </View>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chips}>
-        {CATEGORIES.map((cat) => {
+        {categories.map((cat) => {
           const active = selected === cat;
           return (
             <Pressable

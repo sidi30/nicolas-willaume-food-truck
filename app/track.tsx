@@ -56,6 +56,12 @@ export default function TrackScreen() {
           <Pressable style={styles.secondaryBtn} onPress={() => router.replace('/(tabs)')}>
             <Text style={styles.secondaryText}>Accueil</Text>
           </Pressable>
+          <Pressable
+            style={[styles.secondaryBtn, { marginLeft: 8 }]}
+            onPress={() => order?.id && router.push({ pathname: '/order/[orderId]', params: { orderId: order.id } })}
+          >
+            <Text style={styles.secondaryText}>Voir le détail</Text>
+          </Pressable>
           <Pressable style={styles.primaryBtn} onPress={() => notify('Votre commande est prête !')}>
             <Text style={styles.primaryText}>Voir la notification</Text>
           </Pressable>

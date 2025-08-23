@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { getOpenHoursForCity, generateSlots } from '../utils/schedule';
+import { getOpenHoursForCity, generateSlots, getStepMin } from '../utils/schedule';
 import { useApp } from '../context/AppContext';
 
 const COLORS = {
@@ -26,7 +26,7 @@ export default function SlotScreen() {
   const [dateStr, setDateStr] = useState(formatDateInput(new Date()));
   const date = useMemo(() => new Date(dateStr + 'T00:00:00'), [dateStr]);
   const hours = getOpenHoursForCity(city, date);
-  const slots = useMemo(() => (hours ? generateSlots(date, hours, 15) : []), [date, hours]);
+  const slots = useMemo(() => (hours ? generateSlots(date, hours, getStepMin()) : []), [date, hours]);
 
   const selectedHHmm = useMemo(() => {
     if (!slot) return null;

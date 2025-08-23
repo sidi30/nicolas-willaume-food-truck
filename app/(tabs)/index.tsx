@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image, Platform } from 'react-native';
 import { Link } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -30,6 +30,14 @@ export default function HomeScreen() {
             <Text style={styles.tileSubtitle}>Historique & suivi</Text>
           </Pressable>
         </Link>
+        {Platform.OS === 'web' && (
+          <Link href="/admin" asChild>
+            <Pressable style={styles.tile}>
+              <Text style={styles.tileTitle}>Admin</Text>
+              <Text style={styles.tileSubtitle}>Dashboard web</Text>
+            </Pressable>
+          </Link>
+        )}
       </View>
 
       <View style={styles.infoCard}>

@@ -17,7 +17,7 @@ const COLORS = {
 
 export default function OrderDetailScreen() {
   const { orderId } = useLocalSearchParams<{ orderId?: string }>();
-  const { orders } = useApp();
+  const { orders, clearCart, addToCart, setCity, setSlot } = useApp();
   const order = useMemo(() => orders.find((o) => o.id === orderId), [orders, orderId]);
 
   return (
@@ -81,7 +81,18 @@ export default function OrderDetailScreen() {
                 <Ionicons name="navigate-outline" size={18} color={COLORS.bg} />
                 <Text style={styles.primaryText}>Suivre la préparation</Text>
               </Pressable>
-              <Pressable style={styles.secondaryBtn} onPress={() => router.replace('/(tabs)/menu')}>
+              <Pressable
+                style={styles.secondaryBtn}
+                onPress={() => {
+                  if (!order) return;
+                  // Reset and re-fill cart
+                  clearCart();
+                  setCity(order.city || null);
+                  setSlot(order.slot || null);
+                  order.items.forEach((it) => addToCart(it.product, it.qty));
+                  router.replace('/recap');
+                }}
+              >
                 <Text style={styles.secondaryText}>Commander à nouveau</Text>
               </Pressable>
             </View>
