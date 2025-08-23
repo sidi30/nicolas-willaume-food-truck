@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "William Food Truck",
+    "slug": "william-food-truck-app",
+    "scheme": "williamfoodtruck",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "plugins": ["expo-router"],
+    "platforms": ["android", "ios", "web"],
+    "newArchEnabled": false
+  }
+}
