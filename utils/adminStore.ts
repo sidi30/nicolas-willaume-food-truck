@@ -10,6 +10,8 @@ export type Truck = {
   id: string;
   name: string;
   city?: string;
+  lat?: number;
+  lng?: number;
   active?: boolean;
   note?: string;
 };

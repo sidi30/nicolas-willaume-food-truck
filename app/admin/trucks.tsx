@@ -10,14 +10,14 @@ const COLORS = {
   border: '#f3ece7',
 };
 
-type Draft = { name: string; city?: string; note?: string; active: boolean };
+type Draft = { name: string; city?: string; note?: string; active: boolean; lat?: string; lng?: string };
 
 export default function AdminTrucks() {
   const [trucks, setTrucks] = useState<Truck[]>([]);
   const [q, setQ] = useState('');
-  const [draft, setDraft] = useState<Draft>({ name: '', city: '', note: '', active: true });
+  const [draft, setDraft] = useState<Draft>({ name: '', city: '', note: '', active: true, lat: '', lng: '' });
   const [editing, setEditing] = useState<string | null>(null);
-  const [editDraft, setEditDraft] = useState<Draft>({ name: '', city: '', note: '', active: true });
+  const [editDraft, setEditDraft] = useState<Draft>({ name: '', city: '', note: '', active: true, lat: '', lng: '' });
 
   useEffect(() => {
     setTrucks(loadTrucks());
@@ -36,19 +36,43 @@ export default function AdminTrucks() {
 
   const add = () => {
     if (!draft.name.trim()) return;
-    const t: Truck = { id: genId('T'), name: draft.name.trim(), city: draft.city?.trim() || undefined, note: draft.note?.trim() || undefined, active: draft.active };
+    const latNum = draft.lat && draft.lat.trim() !== '' ? parseFloat(draft.lat) : undefined;
+    const lngNum = draft.lng && draft.lng.trim() !== '' ? parseFloat(draft.lng) : undefined;
+    const t: Truck = {
+      id: genId('T'),
+      name: draft.name.trim(),
+      city: draft.city?.trim() || undefined,
+      note: draft.note?.trim() || undefined,
+      active: draft.active,
+      lat: Number.isFinite(latNum as number) ? latNum : undefined,
+      lng: Number.isFinite(lngNum as number) ? lngNum : undefined,
+    };
     persist([t, ...trucks]);
-    setDraft({ name: '', city: '', note: '', active: true });
+    setDraft({ name: '', city: '', note: '', active: true, lat: '', lng: '' });
   };
 
   const startEdit = (t: Truck) => {
     setEditing(t.id);
-    setEditDraft({ name: t.name, city: t.city || '', note: t.note || '', active: !!t.active });
+    setEditDraft({ name: t.name, city: t.city || '', note: t.note || '', active: !!t.active, lat: t.lat?.toString() || '', lng: t.lng?.toString() || '' });
   };
 
   const save = () => {
     if (!editing) return;
-    const next = trucks.map((t) => (t.id === editing ? { ...t, name: editDraft.name, city: editDraft.city || undefined, note: editDraft.note || undefined, active: editDraft.active } : t));
+    const latNum = editDraft.lat && editDraft.lat.trim() !== '' ? parseFloat(editDraft.lat) : undefined;
+    const lngNum = editDraft.lng && editDraft.lng.trim() !== '' ? parseFloat(editDraft.lng) : undefined;
+    const next = trucks.map((t) => (
+      t.id === editing
+        ? {
+            ...t,
+            name: editDraft.name,
+            city: editDraft.city || undefined,
+            note: editDraft.note || undefined,
+            active: editDraft.active,
+            lat: Number.isFinite(latNum as number) ? latNum : undefined,
+            lng: Number.isFinite(lngNum as number) ? lngNum : undefined,
+          }
+        : t
+    ));
     persist(next);
     setEditing(null);
   };
@@ -65,7 +89,9 @@ export default function AdminTrucks() {
         <Text style={styles.section}>Ajouter un food truck</Text>
         <View style={styles.formRow}>
           <TextInput placeholder="Nom" placeholderTextColor={COLORS.muted} value={draft.name} onChangeText={(v) => setDraft((d) => ({ ...d, name: v }))} style={[styles.input, { flex: 1 }]} />
-          <TextInput placeholder="Ville" placeholderTextColor={COLORS.muted} value={draft.city} onChangeText={(v) => setDraft((d) => ({ ...d, city: v }))} style={[styles.input, { width: 180 }]} />
+          <TextInput placeholder="Ville" placeholderTextColor={COLORS.muted} value={draft.city} onChangeText={(v) => setDraft((d) => ({ ...d, city: v }))} style={[styles.input, { width: 140 }]} />
+          <TextInput placeholder="Lat" placeholderTextColor={COLORS.muted} keyboardType="numeric" value={draft.lat} onChangeText={(v) => setDraft((d) => ({ ...d, lat: v }))} style={[styles.input, { width: 110 }]} />
+          <TextInput placeholder="Lng" placeholderTextColor={COLORS.muted} keyboardType="numeric" value={draft.lng} onChangeText={(v) => setDraft((d) => ({ ...d, lng: v }))} style={[styles.input, { width: 110 }]} />
           <Pressable style={[styles.secondaryBtn, draft.active && { borderColor: COLORS.primary }]} onPress={() => setDraft((d) => ({ ...d, active: !d.active }))}>
             <Text style={[styles.secondaryText, { color: draft.active ? COLORS.primary : COLORS.text }]}>{draft.active ? 'Actif' : 'Inactif'}</Text>
           </Pressable>
@@ -86,7 +112,9 @@ export default function AdminTrucks() {
             <>
               <View style={styles.formRow}>
                 <TextInput value={editDraft.name} onChangeText={(v) => setEditDraft((d) => ({ ...d, name: v }))} style={[styles.input, { flex: 1 }]} />
-                <TextInput value={editDraft.city} onChangeText={(v) => setEditDraft((d) => ({ ...d, city: v }))} style={[styles.input, { width: 180 }]} />
+                <TextInput value={editDraft.city} onChangeText={(v) => setEditDraft((d) => ({ ...d, city: v }))} style={[styles.input, { width: 140 }]} />
+                <TextInput placeholder="Lat" keyboardType="numeric" value={editDraft.lat} onChangeText={(v) => setEditDraft((d) => ({ ...d, lat: v }))} style={[styles.input, { width: 110 }]} />
+                <TextInput placeholder="Lng" keyboardType="numeric" value={editDraft.lng} onChangeText={(v) => setEditDraft((d) => ({ ...d, lng: v }))} style={[styles.input, { width: 110 }]} />
                 <Pressable style={[styles.secondaryBtn, editDraft.active && { borderColor: COLORS.primary }]} onPress={() => setEditDraft((d) => ({ ...d, active: !d.active }))}>
                   <Text style={[styles.secondaryText, { color: editDraft.active ? COLORS.primary : COLORS.text }]}>{editDraft.active ? 'Actif' : 'Inactif'}</Text>
                 </Pressable>

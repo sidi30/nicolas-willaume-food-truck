@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Image, Platform, ScrollView } from 'react-native';
 import { Slot, usePathname, router } from 'expo-router';
+import Head from 'expo-router/head';
 import { Ionicons } from '@expo/vector-icons';
 
 const COLORS = {
@@ -17,9 +18,11 @@ const NAV_ITEMS = [
   { href: '/admin/orders', label: 'Commandes', icon: 'receipt-outline' as const },
   { href: '/admin/menu', label: 'Menu & Burgers', icon: 'fast-food-outline' as const },
   { href: '/admin/schedule', label: 'Calendrier', icon: 'time-outline' as const },
+  { href: '/admin/stats', label: 'Statistiques', icon: 'stats-chart-outline' as const },
   { href: '/admin/notifications', label: 'Notifications', icon: 'notifications-outline' as const },
   { href: '/admin/users', label: 'Utilisateurs', icon: 'people-outline' as const },
   { href: '/admin/trucks', label: 'Food Trucks', icon: 'bus-outline' as const },
+  { href: '/admin/map', label: 'Carte', icon: 'map-outline' as const },
 ];
 
 export default function AdminLayout() {
@@ -37,6 +40,12 @@ export default function AdminLayout() {
 
   return (
     <View style={styles.container}>
+      {/* Leaflet CSS for web */}
+      {Platform.OS === 'web' && (
+        <Head>
+          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        </Head>
+      )}
       <View style={styles.sidebar}>
         <View style={styles.brandBox}>
           <Image source={require('../../utils/logo.jpg')} style={styles.brandLogo} resizeMode="contain" />
