@@ -16,6 +16,9 @@
     "web": {
       "favicon": "./utils/logo.jpg"
     },
+    "experiments": {
+      "baseUrl": "/nicolas-willaume-food-truck"
+    },
     "newArchEnabled": false
   }
 }
