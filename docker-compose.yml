@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  dev:
+    image: node:20-bullseye
+    working_dir: /app
+    ports:
+      - "8081:8081" # Expo Web dev server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - BROWSER=none
+      - HOST=0.0.0.0
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: bash -lc "npm ci && npx expo start --web --non-interactive --port 8081"
+
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
